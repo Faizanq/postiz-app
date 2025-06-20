@@ -22,8 +22,8 @@ export const Checkbox = forwardRef<
 >((props, ref: any) => {
   const { checked, className, label, disableForm, variant } = props;
   const form = useFormContext();
-  const register = disableForm ? {} : form.register(props.name!);
-  const watch = disableForm
+  const register = disableForm || !form ? {} : form.register(props.name!);
+  const watch = disableForm || !form
     ? undefined
     : useWatch({
         name: props.name!,

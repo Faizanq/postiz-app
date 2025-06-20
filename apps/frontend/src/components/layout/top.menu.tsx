@@ -51,6 +51,12 @@ export const useMenuItems = () => {
       path: '/plugs',
     },
     {
+      name: t('customers', 'Customers'),
+      icon: 'customers',
+      path: '/customers',
+      role: ['ADMIN', 'SUPERADMIN'],
+    },
+    {
       name: t('billing', 'Billing'),
       icon: 'billing',
       path: '/billing',

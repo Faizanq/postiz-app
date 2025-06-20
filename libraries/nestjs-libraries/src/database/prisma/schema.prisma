@@ -283,14 +283,44 @@ model Subscription {
 model Customer {
   id           String        @id @default(uuid())
   name         String
+  
+  // Contact Information
+  email        String?
+  phone        String?
+  website      String?
+  contactName  String?
+  contactEmail String?
+  contactPhone String?
+  
+  // Business Info
+  planType     String        @default("STARTER")
+  status       String        @default("ACTIVE")
+  
+  // Important Dates
+  onboardedAt  DateTime      @default(now())
+  lastActiveAt DateTime?
+  deactivatedAt DateTime?
+  
+  // Metadata
+  notes        String?
+  tags         String[]      @default([])
+  
+  // Relationships
   orgId        String
   organization Organization  @relation(fields: [orgId], references: [id])
   integrations Integration[]
+  platformConfigs CustomerPlatformConfig[]
+  statusHistory CustomerStatusHistory[]
+  planHistory  CustomerPlanHistory[]
+  
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?
 
   @@unique([orgId, name, deletedAt])
+  @@unique([orgId, email, deletedAt])
+  @@index([status])
+  @@index([planType])
 }
 
 model Integration {
@@ -662,4 +692,60 @@ enum APPROVED_SUBMIT_FOR_ORDER {
   NO
   WAITING_CONFIRMATION
   YES
+}
+
+// Customer Management Models
+model CustomerPlatformConfig {
+  id         String   @id @default(uuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+  
+  platform   String   // 'twitter', 'facebook', 'linkedin', etc.
+  isEnabled  Boolean  @default(false)
+  isActive   Boolean  @default(true)  // Can be turned on/off anytime
+  
+  // OAuth credentials (encrypted)
+  clientId     String?
+  clientSecret String?  // Will be encrypted
+  
+  // Connection status
+  isConnected  Boolean @default(false)
+  connectedAt  DateTime?
+  lastError    String?
+  
+  // Pause/Resume tracking
+  pausedAt     DateTime?
+  pausedReason String?
+  resumedAt    DateTime?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([customerId, platform])
+}
+
+model CustomerStatusHistory {
+  id         String         @id @default(uuid())
+  customerId String
+  customer   Customer       @relation(fields: [customerId], references: [id])
+  
+  fromStatus String?
+  toStatus   String
+  reason     String?
+  changedBy  String         // userId
+  
+  createdAt  DateTime       @default(now())
+}
+
+model CustomerPlanHistory {
+  id         String       @id @default(uuid())
+  customerId String
+  customer   Customer     @relation(fields: [customerId], references: [id])
+  
+  fromPlan   String?
+  toPlan     String
+  reason     String?
+  changedBy  String       // userId
+  
+  createdAt  DateTime     @default(now())
 }

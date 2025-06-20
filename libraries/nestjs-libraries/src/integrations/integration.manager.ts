@@ -27,6 +27,8 @@ import { FarcasterProvider } from '@gitroom/nestjs-libraries/integrations/social
 import { TelegramProvider } from '@gitroom/nestjs-libraries/integrations/social/telegram.provider';
 import { NostrProvider } from '@gitroom/nestjs-libraries/integrations/social/nostr.provider';
 import { VkProvider } from '@gitroom/nestjs-libraries/integrations/social/vk.provider';
+import { GoogleBusinessProvider } from '@gitroom/nestjs-libraries/integrations/social/google-business.provider';
+import { WebProvider } from '@gitroom/nestjs-libraries/integrations/social/web.provider';
 
 export const socialIntegrationList: SocialProvider[] = [
   new XProvider(),
@@ -50,6 +52,8 @@ export const socialIntegrationList: SocialProvider[] = [
   new TelegramProvider(),
   new NostrProvider(),
   new VkProvider(),
+  new GoogleBusinessProvider(),
+  new WebProvider(),
   // new MastodonCustomProvider(),
 ];
 
