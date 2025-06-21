@@ -16,6 +16,7 @@ import { object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { web3List } from '@gitroom/frontend/components/launches/web3/web3.list';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { useAddProviderWithCustomer } from '@gitroom/frontend/components/launches/add-channel-with-customer';
 const resolver = classValidatorResolver(ApiKeyDto);
 export const useAddProvider = (update?: () => void) => {
   const modal = useModals();
@@ -37,7 +38,7 @@ export const AddProviderButton: FC<{
   update?: () => void;
 }> = (props) => {
   const { update } = props;
-  const add = useAddProvider(update);
+  const add = useAddProviderWithCustomer(update);
   const t = useT();
 
   return (
@@ -249,10 +250,14 @@ export const CustomVariables: FC<{
   });
   const submit = useCallback(
     async (data: FieldValues) => {
+      const selectedCustomerId = sessionStorage.getItem('selectedCustomerId');
+      const queryParams = new URLSearchParams({
+        state: 'nostate',
+        code: Buffer.from(JSON.stringify(data)).toString('base64')
+      });
+      if (selectedCustomerId) queryParams.append('customerId', selectedCustomerId);
       gotoUrl(
-        `/integrations/social/${identifier}?state=nostate&code=${Buffer.from(
-          JSON.stringify(data)
-        ).toString('base64')}`
+        `/integrations/social/${identifier}?${queryParams.toString()}`
       );
     },
     [variables]
@@ -361,7 +366,13 @@ export const AddProviderComponent: FC<{
             children: (
               <Web3Providers
                 onComplete={(code, newState) => {
-                  window.location.href = `/integrations/social/${identifier}?code=${code}&state=${newState}`;
+                  const selectedCustomerId = sessionStorage.getItem('selectedCustomerId');
+                  const queryParams = new URLSearchParams({
+                    code,
+                    state: newState
+                  });
+                  if (selectedCustomerId) queryParams.append('customerId', selectedCustomerId);
+                  window.location.href = `/integrations/social/${identifier}?${queryParams.toString()}`;
                 }}
                 nonce={url}
               />
@@ -370,10 +381,15 @@ export const AddProviderComponent: FC<{
           return;
         };
         const gotoIntegration = async (externalUrl?: string) => {
+          const selectedCustomerId = sessionStorage.getItem('selectedCustomerId');
+          const queryParams = new URLSearchParams();
+          if (externalUrl) queryParams.append('externalUrl', externalUrl);
+          if (selectedCustomerId) queryParams.append('customerId', selectedCustomerId);
+          
           const { url, err } = await (
             await fetch(
               `/integrations/social/${identifier}${
-                externalUrl ? `?externalUrl=${externalUrl}` : ``
+                queryParams.toString() ? `?${queryParams.toString()}` : ``
               }`
             )
           ).json();

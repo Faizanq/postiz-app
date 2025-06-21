@@ -13,6 +13,7 @@ import { Button } from '@gitroom/react/form/button';
 import { useRouter } from 'next/navigation';
 import { useToaster } from '@gitroom/react/toaster/toaster';
 import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { CustomerSelector } from '@gitroom/frontend/components/customers/customer-selector';
 const allowedIntegrations = [
   'facebook',
   'instagram',
@@ -31,6 +32,7 @@ export const PlatformAnalytics = () => {
   const [current, setCurrent] = useState(0);
   const [key, setKey] = useState(7);
   const [refresh, setRefresh] = useState(false);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const toaster = useToaster();
   const load = useCallback(async () => {
     const int = (await (await fetch('/integrations/list')).json()).integrations;
@@ -39,13 +41,19 @@ export const PlatformAnalytics = () => {
   const { data, isLoading } = useSWR('analytics-list', load, {
     fallbackData: [],
   });
+  const filteredIntegrations = useMemo(() => {
+    if (!selectedCustomerId) {
+      return data;
+    }
+    return data.filter((integration: any) => integration.customer?.id === selectedCustomerId);
+  }, [data, selectedCustomerId]);
   const sortedIntegrations = useMemo(() => {
     return orderBy(
-      data,
+      filteredIntegrations,
       ['type', 'disabled', 'identifier'],
       ['desc', 'asc', 'asc']
     );
-  }, [data]);
+  }, [filteredIntegrations]);
   const currentIntegration = useMemo(() => {
     return sortedIntegrations[current];
   }, [current, sortedIntegrations]);
@@ -213,21 +221,30 @@ export const PlatformAnalytics = () => {
       </div>
       {!!options.length && (
         <div className="flex-1 flex flex-col gap-[14px]">
-          <div className="max-w-[200px]">
-            <Select
+          <div className="flex gap-4">
+            <div className="max-w-[200px]">
+              <Select
+                className="bg-customColor49 !border-0"
+                label=""
+                name="date"
+                disableForm={true}
+                hideErrors={true}
+                onChange={(e) => setKey(+e.target.value)}
+              >
+                {options.map((option) => (
+                  <option key={option.key} value={option.key}>
+                    {option.value}
+                  </option>
+                ))}
+              </Select>
+            </div>
+            <CustomerSelector 
+              onCustomerChange={(customerId) => {
+                setSelectedCustomerId(customerId);
+                setCurrent(0); // Reset to first integration when customer changes
+              }}
               className="bg-customColor49 !border-0"
-              label=""
-              name="date"
-              disableForm={true}
-              hideErrors={true}
-              onChange={(e) => setKey(+e.target.value)}
-            >
-              {options.map((option) => (
-                <option key={option.key} value={option.key}>
-                  {option.value}
-                </option>
-              ))}
-            </Select>
+            />
           </div>
           <div className="flex-1">
             {!!keys && !!currentIntegration && !refresh && (
