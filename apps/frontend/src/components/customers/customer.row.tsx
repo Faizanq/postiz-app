@@ -84,29 +84,29 @@ export const CustomerRow: FC<CustomerRowProps> = ({
   const getPlanColor = (planType: string) => {
     switch (planType) {
       case 'STARTER':
-        return 'text-blue-400';
+        return 'text-blue-500';
       case 'SOCIAL_COMBO':
-        return 'text-green-400';
+        return 'text-green-500';
       case 'PROFESSIONAL':
-        return 'text-purple-400';
+        return 'text-purple-500';
       case 'ENTERPRISE':
-        return 'text-orange-400';
+        return 'text-orange-500';
       default:
-        return 'text-gray-400';
+        return 'text-textColor opacity-60';
     }
   };
 
   const getStatusColor = (status: string) => {
-    return status === 'ACTIVE' ? 'text-green-400' : 'text-red-400';
+    return status === 'ACTIVE' ? 'text-green-500' : 'text-red-500';
   };
 
   return (
-    <tr className="border-b border-[#172034] hover:bg-[#0B101B] transition-colors">
+    <tr className="border-b border-tableBorder hover:bg-secondary transition-colors">
       <td className="p-4">
         <div>
           <div className="font-medium">{customer.name}</div>
           {customer.email && (
-            <div className="text-sm text-gray-400">{customer.email}</div>
+            <div className="text-sm text-textColor opacity-60">{customer.email}</div>
           )}
         </div>
       </td>
@@ -114,10 +114,10 @@ export const CustomerRow: FC<CustomerRowProps> = ({
         <div className="text-sm">
           {customer.contactName && <div>{customer.contactName}</div>}
           {customer.contactEmail && (
-            <div className="text-gray-400">{customer.contactEmail}</div>
+            <div className="text-textColor opacity-60">{customer.contactEmail}</div>
           )}
           {customer.contactPhone && (
-            <div className="text-gray-400">{customer.contactPhone}</div>
+            <div className="text-textColor opacity-60">{customer.contactPhone}</div>
           )}
         </div>
       </td>
@@ -163,7 +163,7 @@ export const CustomerRow: FC<CustomerRowProps> = ({
           ))}
         </div>
       </td>
-      <td className="p-4 text-sm text-gray-400">
+      <td className="p-4 text-sm text-textColor opacity-60">
         {new Date(customer.onboardedAt).toLocaleDateString('en-US', { 
           month: 'short', 
           day: 'numeric', 
@@ -175,7 +175,7 @@ export const CustomerRow: FC<CustomerRowProps> = ({
           <button
             ref={buttonRef}
             onClick={handleToggleDropdown}
-            className="p-2 rounded-md hover:bg-[#1D2632] transition-colors"
+            className="p-2 rounded-md hover:bg-third transition-colors"
             aria-label="Actions"
           >
             <svg
@@ -197,7 +197,7 @@ export const CustomerRow: FC<CustomerRowProps> = ({
           {showDropdown && (
             <div 
               className={clsx(
-                "absolute right-0 w-48 rounded-md bg-[#0B101B] border border-[#2A3744] shadow-lg z-[100]",
+                "absolute right-0 w-48 rounded-md bg-primary border border-customColor6 shadow-lg z-[100]",
                 dropdownPosition === 'top' ? 'bottom-full mb-1' : 'top-full mt-1'
               )}>
               <button
@@ -205,7 +205,7 @@ export const CustomerRow: FC<CustomerRowProps> = ({
                   handleEdit();
                   setShowDropdown(false);
                 }}
-                className="w-full px-4 py-2 text-sm text-left hover:bg-[#2A3744] transition-colors flex items-center gap-2"
+                className="w-full px-4 py-2 text-sm text-left hover:bg-secondary transition-colors flex items-center gap-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -216,7 +216,7 @@ export const CustomerRow: FC<CustomerRowProps> = ({
               <Link
                 href={`/customers/${customer.id}/platforms`}
                 onClick={() => setShowDropdown(false)}
-                className="w-full px-4 py-2 text-sm text-left hover:bg-[#2A3744] transition-colors flex items-center gap-2"
+                className="w-full px-4 py-2 text-sm text-left hover:bg-secondary transition-colors flex items-center gap-2 block"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -229,7 +229,7 @@ export const CustomerRow: FC<CustomerRowProps> = ({
                   handleChangePlan();
                   setShowDropdown(false);
                 }}
-                className="w-full px-4 py-2 text-sm text-left hover:bg-[#2A3744] transition-colors flex items-center gap-2"
+                className="w-full px-4 py-2 text-sm text-left hover:bg-secondary transition-colors flex items-center gap-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
@@ -241,7 +241,7 @@ export const CustomerRow: FC<CustomerRowProps> = ({
                   onStatusChange(customer);
                   setShowDropdown(false);
                 }}
-                className="w-full px-4 py-2 text-sm text-left hover:bg-[#2A3744] transition-colors flex items-center gap-2"
+                className="w-full px-4 py-2 text-sm text-left hover:bg-secondary transition-colors flex items-center gap-2"
               >
                 {customer.status === 'ACTIVE' ? (
                   <>
@@ -260,13 +260,13 @@ export const CustomerRow: FC<CustomerRowProps> = ({
                   </>
                 )}
               </button>
-              <hr className="border-[#2A3744] my-1" />
+              <hr className="border-customColor6 my-1" />
               <button
                 onClick={() => {
                   onDelete(customer);
                   setShowDropdown(false);
                 }}
-                className="w-full px-4 py-2 text-sm text-left text-red-400 hover:bg-[#2A3744] transition-colors flex items-center gap-2"
+                className="w-full px-4 py-2 text-sm text-left text-red-500 hover:bg-secondary transition-colors flex items-center gap-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="3 6 5 6 21 6"></polyline>

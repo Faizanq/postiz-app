@@ -74,55 +74,64 @@ export const CustomersTable: FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex gap-4 flex-wrap">
-        <Input
-          placeholder="Search by name, email, or phone..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 min-w-[200px]"
-          label=""
-          name="search"
-          disableForm={true}
-        />
-        <Select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="min-w-[150px]"
-          label=""
-          name="statusFilter"
-          disableForm={true}
-        >
-          <option value="">All Status</option>
-          <option value="ACTIVE">Active</option>
-          <option value="INACTIVE">Inactive</option>
-        </Select>
-        <Select
-          value={planFilter}
-          onChange={(e) => setPlanFilter(e.target.value)}
-          className="min-w-[150px]"
-          label=""
-          name="planFilter"
-          disableForm={true}
-        >
+      <div className="flex gap-4 flex-wrap items-stretch">
+        <div className="flex-1 min-w-[200px] max-w-[400px]">
+          <Input
+            placeholder="Search by name, email, or phone..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full"
+            label=" "
+            name="search"
+            disableForm={true}
+            removeError={true}
+          />
+        </div>
+        <div className="min-w-[150px]">
+          <Select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="w-full"
+            label=" "
+            name="statusFilter"
+            disableForm={true}
+            hideErrors={true}
+          >
+            <option value="">All Status</option>
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
+          </Select>
+        </div>
+        <div className="min-w-[150px]">
+          <Select
+            value={planFilter}
+            onChange={(e) => setPlanFilter(e.target.value)}
+            className="w-full"
+            label=" "
+            name="planFilter"
+            disableForm={true}
+            hideErrors={true}
+          >
           <option value="">All Plans</option>
           <option value="STARTER">Starter</option>
           <option value="SOCIAL_COMBO">Social Combo</option>
           <option value="PROFESSIONAL">Professional</option>
           <option value="ENTERPRISE">Enterprise</option>
-        </Select>
+          </Select>
+        </div>
       </div>
 
       {customers.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-textColor opacity-60">
           {debouncedSearch || statusFilter || planFilter
             ? 'No customers found matching your filters'
             : 'No customers yet. Click "Add Customer" to get started.'}
         </div>
       ) : (
-        <div className="bg-sixth rounded-lg overflow-visible">
+        <div className="bg-secondary rounded-lg overflow-visible">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[#172034]">
+              <tr className="border-b border-tableBorder">
                 <th className="text-left p-4">Customer</th>
                 <th className="text-left p-4">Contact</th>
                 <th className="text-left p-4">Plan</th>

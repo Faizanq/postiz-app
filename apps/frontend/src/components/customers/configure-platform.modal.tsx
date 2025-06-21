@@ -85,7 +85,7 @@ export const ConfigurePlatformModal: FC<ConfigurePlatformModalProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6" autoComplete="off">
       <div className="flex items-center gap-4 p-4 bg-sixth rounded-lg">
         {platform.platform === 'youtube' ? (
           <img
@@ -104,15 +104,15 @@ export const ConfigurePlatformModal: FC<ConfigurePlatformModalProps> = ({
         )}
         <div>
           <h3 className="text-lg font-medium capitalize">{platform.platform}</h3>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-textColor opacity-60">
             Configure OAuth credentials for this platform
           </p>
         </div>
       </div>
 
       <div className="space-y-4">
-        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
-          <p className="text-sm text-yellow-500">
+        <div className="bg-orange-500/10 border border-orange-500/30 rounded-lg p-4">
+          <p className="text-sm text-orange-500">
             <strong>Important:</strong> These credentials are for your OAuth application. 
             You can create them in the {platform.platform} developer console.
           </p>
@@ -120,27 +120,31 @@ export const ConfigurePlatformModal: FC<ConfigurePlatformModalProps> = ({
 
         <Input
           label="Client ID / App ID"
+          name="clientId"
           value={formData.clientId}
           onChange={(e) => setFormData({ ...formData, clientId: e.target.value })}
           placeholder={`Enter ${platform.platform} Client ID`}
           required
           disableForm={true}
+          autoComplete="off"
         />
 
         <div className="relative">
           <Input
             label="Client Secret / App Secret"
+            name="clientSecret"
             type={showSecret ? 'text' : 'password'}
             value={formData.clientSecret}
             onChange={(e) => setFormData({ ...formData, clientSecret: e.target.value })}
             placeholder={`Enter ${platform.platform} Client Secret`}
             required
             disableForm={true}
+            autoComplete="new-password"
           />
           <button
             type="button"
             onClick={() => setShowSecret(!showSecret)}
-            className="absolute right-3 top-[38px] text-gray-400 hover:text-white"
+            className="absolute right-3 top-[38px] text-textColor opacity-60 hover:text-textColor hover:opacity-100"
           >
             {showSecret ? (
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,7 +179,7 @@ export const ConfigurePlatformModal: FC<ConfigurePlatformModalProps> = ({
       <div className="flex gap-3 pt-4">
         <Button
           type="button"
-          variant="secondary"
+          secondary
           onClick={handleTestConnection}
           loading={loading}
           disabled={!formData.clientId || !formData.clientSecret}
@@ -187,7 +191,7 @@ export const ConfigurePlatformModal: FC<ConfigurePlatformModalProps> = ({
         </Button>
       </div>
 
-      <div className="text-xs text-gray-400 space-y-1">
+      <div className="text-xs text-textColor opacity-60 space-y-1">
         <p>• Credentials are encrypted and stored securely</p>
         <p>• You can update these credentials anytime</p>
         <p>• Changes will apply to new connections only</p>

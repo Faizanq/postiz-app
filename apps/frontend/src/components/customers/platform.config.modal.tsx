@@ -129,16 +129,16 @@ export const PlatformConfigModal: FC<PlatformConfigModalProps> = ({ customer, on
           const platformInfo = PLATFORM_INFO[config.platform] || {
             name: config.platform,
             icon: '🌐',
-            color: 'text-gray-400',
+            color: 'text-textColor opacity-60',
           };
-          const data = formData[config.platform] || {};
+          const data = formData[config.platform] || {} as UpdatePlatformConfigDto & { platform: string };
 
           return (
             <div
               key={config.platform}
               className={clsx(
-                'border border-[#172034] rounded-lg p-4',
-                config.isConnected && 'border-green-800',
+                'border border-tableBorder rounded-lg p-4',
+                config.isConnected && 'border-green-600',
                 !config.isEnabled && 'opacity-60'
               )}
             >
@@ -153,16 +153,16 @@ export const PlatformConfigModal: FC<PlatformConfigModalProps> = ({ customer, on
                       <span
                         className={clsx(
                           'font-medium',
-                          config.isConnected ? 'text-green-400' : 'text-gray-400'
+                          config.isConnected ? 'text-green-500' : 'text-textColor opacity-60'
                         )}
                       >
                         {config.isConnected ? 'Connected' : 'Not Connected'}
                       </span>
                       {config.isActive && (
-                        <span className="text-green-400">• Active</span>
+                        <span className="text-green-500">• Active</span>
                       )}
                       {config.pausedAt && (
-                        <span className="text-orange-400">• Paused</span>
+                        <span className="text-orange-500">• Paused</span>
                       )}
                     </div>
                   </div>
@@ -178,6 +178,7 @@ export const PlatformConfigModal: FC<PlatformConfigModalProps> = ({ customer, on
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <Input
                   label="Client ID"
+                  name="clientId"
                   value={data.clientId ?? ''}
                   onChange={(e) => updatePlatformField(config.platform, 'clientId', e.target.value)}
                   placeholder="Enter client ID"
@@ -187,6 +188,7 @@ export const PlatformConfigModal: FC<PlatformConfigModalProps> = ({ customer, on
                 
                 <Input
                   label="Client Secret"
+                  name="clientSecret"
                   value={data.clientSecret ?? ''}
                   onChange={(e) => updatePlatformField(config.platform, 'clientSecret', e.target.value)}
                   placeholder="Enter client secret"
@@ -196,20 +198,20 @@ export const PlatformConfigModal: FC<PlatformConfigModalProps> = ({ customer, on
               </div>
 
               {config.lastError && (
-                <div className="bg-red-900/20 text-red-400 p-2 rounded text-sm mb-4">
+                <div className="bg-red-500/10 text-red-500 p-2 rounded text-sm mb-4">
                   Error: {config.lastError}
                 </div>
               )}
 
               {config.pausedAt && config.pausedReason && (
-                <div className="bg-orange-900/20 text-orange-400 p-2 rounded text-sm mb-4">
+                <div className="bg-orange-500/10 text-orange-500 p-2 rounded text-sm mb-4">
                   Paused: {config.pausedReason}
                 </div>
               )}
 
               <div className="flex gap-2">
                 <Button
-                  size="small"
+                  className="text-sm px-3 py-1"
                   onClick={() => savePlatformConfig(config.platform)}
                   disabled={savingPlatform === config.platform}
                 >
@@ -218,8 +220,8 @@ export const PlatformConfigModal: FC<PlatformConfigModalProps> = ({ customer, on
                 
                 {config.isActive && !config.pausedAt && (
                   <Button
-                    size="small"
-                    variant="secondary"
+                    className="text-sm px-3 py-1"
+                    secondary
                     onClick={() => handlePausePlatform(config.platform)}
                   >
                     Pause
@@ -228,8 +230,8 @@ export const PlatformConfigModal: FC<PlatformConfigModalProps> = ({ customer, on
                 
                 {config.pausedAt && (
                   <Button
-                    size="small"
-                    variant="secondary"
+                    className="text-sm px-3 py-1"
+                    secondary
                     onClick={() => handleResumePlatform(config.platform)}
                   >
                     Resume
@@ -242,13 +244,13 @@ export const PlatformConfigModal: FC<PlatformConfigModalProps> = ({ customer, on
       </div>
 
       {configs.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-textColor opacity-60">
           No platforms configured for this customer yet.
         </div>
       )}
 
       <div className="flex justify-end mt-4">
-        <Button variant="secondary" onClick={() => modals.closeAll()}>
+        <Button secondary onClick={() => modals.closeAll()}>
           Close
         </Button>
       </div>

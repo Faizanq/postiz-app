@@ -14,7 +14,7 @@ export const MantineWrapper = (props: { children: ReactNode }) => {
         modalProps={{
           dir,
           classNames: {
-            modal: 'bg-primary text-white border-fifth border',
+            modal: 'bg-primary text-textColor border-fifth border',
             close: 'bg-black hover:bg-black cursor-pointer',
           },
         }}

@@ -60,6 +60,7 @@ export const EditCustomerModal: FC<EditCustomerModalProps> = ({ customer, onUpda
       <div className="grid grid-cols-2 gap-4">
         <Input
           label="Customer Name *"
+          name="name"
           value={formData.name}
           onChange={(e) => updateField('name', e.target.value)}
           placeholder="ACME Corp"
@@ -68,11 +69,11 @@ export const EditCustomerModal: FC<EditCustomerModalProps> = ({ customer, onUpda
         />
         
         <div className="flex flex-col">
-          <label className="text-sm text-gray-400 mb-1">Plan Type</label>
-          <div className="bg-sixth rounded px-3 py-2 text-gray-400">
+          <label className="text-sm text-textColor opacity-60 mb-1">Plan Type</label>
+          <div className="bg-sixth rounded px-3 py-2 text-textColor opacity-60">
             {customer.planType.replace('_', ' ')}
           </div>
-          <span className="text-xs text-gray-500 mt-1">
+          <span className="text-xs text-textColor opacity-50 mt-1">
             Use "Change Plan" to modify
           </span>
         </div>
@@ -81,6 +82,7 @@ export const EditCustomerModal: FC<EditCustomerModalProps> = ({ customer, onUpda
       <div className="grid grid-cols-2 gap-4">
         <Input
           label="Email"
+          name="email"
           type="email"
           value={formData.email || ''}
           onChange={(e) => updateField('email', e.target.value)}
@@ -90,6 +92,7 @@ export const EditCustomerModal: FC<EditCustomerModalProps> = ({ customer, onUpda
         
         <Input
           label="Phone"
+          name="phone"
           value={formData.phone || ''}
           onChange={(e) => updateField('phone', e.target.value)}
           placeholder="+1234567890"
@@ -99,6 +102,7 @@ export const EditCustomerModal: FC<EditCustomerModalProps> = ({ customer, onUpda
 
       <Input
         label="Website"
+        name="website"
         value={formData.website || ''}
         onChange={(e) => updateField('website', e.target.value)}
         placeholder="https://example.com"
@@ -110,6 +114,7 @@ export const EditCustomerModal: FC<EditCustomerModalProps> = ({ customer, onUpda
       <div className="grid grid-cols-2 gap-4">
         <Input
           label="Contact Name"
+          name="contactName"
           value={formData.contactName || ''}
           onChange={(e) => updateField('contactName', e.target.value)}
           placeholder="John Doe"
@@ -118,6 +123,7 @@ export const EditCustomerModal: FC<EditCustomerModalProps> = ({ customer, onUpda
         
         <Input
           label="Contact Email"
+          name="contactEmail"
           type="email"
           value={formData.contactEmail || ''}
           onChange={(e) => updateField('contactEmail', e.target.value)}
@@ -128,6 +134,7 @@ export const EditCustomerModal: FC<EditCustomerModalProps> = ({ customer, onUpda
 
       <Input
         label="Contact Phone"
+        name="contactPhone"
         value={formData.contactPhone || ''}
         onChange={(e) => updateField('contactPhone', e.target.value)}
         placeholder="+1234567890"
@@ -136,6 +143,7 @@ export const EditCustomerModal: FC<EditCustomerModalProps> = ({ customer, onUpda
 
       <Input
         label="Tags (comma-separated)"
+        name="tags"
         value={(formData.tags || []).join(', ')}
         onChange={(e) =>
           updateField(
@@ -152,34 +160,34 @@ export const EditCustomerModal: FC<EditCustomerModalProps> = ({ customer, onUpda
 
       <Textarea
         label="Notes"
+        name="notes"
         value={formData.notes || ''}
         onChange={(e) => updateField('notes', e.target.value)}
         placeholder="Additional notes about the customer..."
-        rows={3}
         disableForm={true}
       />
 
-      <div className="bg-[#0B101B] rounded p-4 text-sm">
+      <div className="bg-secondary rounded p-4 text-sm">
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <span className="text-gray-500">Status:</span>{' '}
-            <span className={customer.status === 'ACTIVE' ? 'text-green-400' : 'text-red-400'}>
+            <span className="text-textColor opacity-50">Status:</span>{' '}
+            <span className={customer.status === 'ACTIVE' ? 'text-green-500' : 'text-red-500'}>
               {customer.status}
             </span>
           </div>
           <div>
-            <span className="text-gray-500">Onboarded:</span>{' '}
+            <span className="text-textColor opacity-50">Onboarded:</span>{' '}
             {new Date(customer.onboardedAt).toLocaleDateString()}
           </div>
           {customer.lastActiveAt && (
             <div>
-              <span className="text-gray-500">Last Active:</span>{' '}
+              <span className="text-textColor opacity-50">Last Active:</span>{' '}
               {new Date(customer.lastActiveAt).toLocaleDateString()}
             </div>
           )}
           {customer.deactivatedAt && (
             <div>
-              <span className="text-gray-500">Deactivated:</span>{' '}
+              <span className="text-textColor opacity-50">Deactivated:</span>{' '}
               {new Date(customer.deactivatedAt).toLocaleDateString()}
             </div>
           )}
@@ -187,7 +195,7 @@ export const EditCustomerModal: FC<EditCustomerModalProps> = ({ customer, onUpda
       </div>
 
       <div className="flex justify-end gap-2 mt-4">
-        <Button variant="secondary" onClick={() => modals.closeAll()} disabled={loading}>
+        <Button secondary onClick={() => modals.closeAll()} disabled={loading}>
           Cancel
         </Button>
         <Button type="submit" disabled={loading}>

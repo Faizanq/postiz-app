@@ -96,7 +96,7 @@ export const AddCustomerModal: FC = () => {
     }
   };
 
-  const updateField = (field: keyof CreateCustomerDto, value: any) => {
+  const updateField = (field: keyof (CreateCustomerDto & { tagsInput?: string }), value: any) => {
     console.log(`Updating field ${field} to:`, value);
     setFormData((prev) => {
       const newData = { ...prev, [field]: value };
@@ -110,6 +110,7 @@ export const AddCustomerModal: FC = () => {
       <div className="grid grid-cols-2 gap-4">
         <Input
           label="Customer Name *"
+          name="name"
           value={formData.name}
           onChange={(e) => updateField('name', e.target.value)}
           placeholder="ACME Corp"
@@ -119,6 +120,7 @@ export const AddCustomerModal: FC = () => {
         
         <Select
           label="Plan Type"
+          name="planType"
           value={formData.planType}
           onChange={(e) => updateField('planType', e.target.value)}
           disableForm={true}
@@ -133,6 +135,7 @@ export const AddCustomerModal: FC = () => {
       <div className="grid grid-cols-2 gap-4">
         <Input
           label="Email"
+          name="email"
           type="email"
           value={formData.email || ''}
           onChange={(e) => updateField('email', e.target.value)}
@@ -142,6 +145,7 @@ export const AddCustomerModal: FC = () => {
         
         <Input
           label="Phone"
+          name="phone"
           value={formData.phone || ''}
           onChange={(e) => updateField('phone', e.target.value)}
           placeholder="+1234567890"
@@ -151,6 +155,7 @@ export const AddCustomerModal: FC = () => {
 
       <Input
         label="Website"
+        name="website"
         value={formData.website || ''}
         onChange={(e) => updateField('website', e.target.value)}
         placeholder="https://example.com"
@@ -162,6 +167,7 @@ export const AddCustomerModal: FC = () => {
       <div className="grid grid-cols-2 gap-4">
         <Input
           label="Contact Name"
+          name="contactName"
           value={formData.contactName || ''}
           onChange={(e) => updateField('contactName', e.target.value)}
           placeholder="John Doe"
@@ -170,6 +176,7 @@ export const AddCustomerModal: FC = () => {
         
         <Input
           label="Contact Email"
+          name="contactEmail"
           type="email"
           value={formData.contactEmail || ''}
           onChange={(e) => updateField('contactEmail', e.target.value)}
@@ -180,6 +187,7 @@ export const AddCustomerModal: FC = () => {
 
       <Input
         label="Contact Phone"
+        name="contactPhone"
         value={formData.contactPhone || ''}
         onChange={(e) => updateField('contactPhone', e.target.value)}
         placeholder="+1234567890"
@@ -187,7 +195,7 @@ export const AddCustomerModal: FC = () => {
       />
 
       <div>
-        <label className="text-sm text-gray-400 mb-2 block">Enabled Platforms</label>
+        <label className="text-sm text-textColor opacity-60 mb-2 block">Enabled Platforms</label>
         <div className="grid grid-cols-2 gap-2">
           {platforms?.map((platform: Platform) => (
             <Checkbox
@@ -219,7 +227,6 @@ export const AddCustomerModal: FC = () => {
                 });
               }}
               label={platform.name}
-              title={platform.toolTip}
             />
           ))}
         </div>
@@ -227,6 +234,7 @@ export const AddCustomerModal: FC = () => {
 
       <Input
         label="Tags (comma-separated)"
+        name="tagsInput"
         value={formData.tagsInput || ''}
         onChange={(e) => updateField('tagsInput', e.target.value)}
         placeholder="agency, premium, active"
@@ -235,15 +243,15 @@ export const AddCustomerModal: FC = () => {
 
       <Textarea
         label="Notes"
+        name="notes"
         value={formData.notes || ''}
         onChange={(e) => updateField('notes', e.target.value)}
         placeholder="Additional notes about the customer..."
-        rows={3}
         disableForm={true}
       />
 
       <div className="flex justify-end gap-2 mt-4">
-        <Button variant="secondary" onClick={() => modals.closeAll()} disabled={loading}>
+        <Button secondary onClick={() => modals.closeAll()} disabled={loading}>
           Cancel
         </Button>
         <Button type="submit" disabled={loading}>

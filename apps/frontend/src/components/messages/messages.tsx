@@ -155,7 +155,8 @@ const Page: FC<{
     refChange.current?.scrollTo(0, refChange.current.scrollHeight);
   }, [refChange]);
   const messages = useMemo(() => {
-    return reverse([...(data?.messages || [])]);
+    const msgs = [...(data?.messages || [])];
+    return msgs.reverse();
   }, [data]);
   return (
     <>

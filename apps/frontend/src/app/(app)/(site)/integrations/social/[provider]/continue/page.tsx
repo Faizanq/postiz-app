@@ -14,6 +14,13 @@ export default async function Page({
   searchParams: any;
 }) {
   const t = await getT();
+  
+  // Check if this is a customer OAuth callback
+  if (searchParams.customer) {
+    // Redirect to customer callback handler
+    const queryParams = new URLSearchParams(searchParams);
+    return redirect(`/integrations/social/${provider}/customer-callback?${queryParams.toString()}`);
+  }
   if (provider === 'x') {
     searchParams = {
       ...searchParams,
